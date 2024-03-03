@@ -9,7 +9,9 @@ type PlaylistConfig struct {
 }
 
 type PlaylistService interface {
-	GetPlaylistInfo(w http.ResponseWriter, r *http.Request, playlistId string) interface{}
+	GetPlaylistInfo(w http.ResponseWriter, r *http.Request, playlistId string)
+	GetPlaylistItemsInfo(w http.ResponseWriter, r *http.Request, playlistId string)
+	GetCurrentUserPlaylists(w http.ResponseWriter, r *http.Request)
 }
 
 func (ps *PlaylistConfig) SetClient(client *http.Client) {

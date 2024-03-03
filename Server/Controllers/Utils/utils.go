@@ -52,7 +52,7 @@ func POSTRequest(endpoint string, client *http.Client, body io.Reader, content_t
 	return Request(req, client, "")
 }*/
 
-func Request(client *http.Client, method, endpoint string, body io.Reader) ([]byte, error) {
+func Request(method string, client *http.Client, endpoint string, body io.Reader) ([]byte, error) {
 
 	/*req.Header.Add("Authorization", "Bearer "+access_token)
 	if len(content_type) != 0 {

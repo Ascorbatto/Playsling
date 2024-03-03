@@ -3,7 +3,6 @@ package handlers
 import (
 	controllers "Conversify/Server/Controllers"
 	spotify "Conversify/Server/Controllers/Api/Spotify"
-	youtube "Conversify/Server/Controllers/Api/Youtube"
 	services "Conversify/Server/Services"
 	spotifyservices "Conversify/Server/Services/Spotify"
 	youtubeservices "Conversify/Server/Services/Youtube"
@@ -11,25 +10,24 @@ import (
 	"strings"
 )
 
-var playlistControllers map[string]*controllers.PlaylistController
+var playlistControllers = make(map[string]*controllers.PlaylistController)
 
 func InitPlaylistController(platform string, client *http.Client) {
-	playlistControllers = make(map[string]*controllers.PlaylistController)
 	playlistConfig := services.NewPlaylistConfig(client)
+	var playlistService services.PlaylistService
 
 	switch platform {
 	case "spotify":
-		playlistService := spotifyservices.NewSpotifyPlaylistService(playlistConfig)
-		playlistControllers["spotify"] = controllers.NewPlaylistController(playlistService)
+		playlistService = spotifyservices.NewSpotifyPlaylistService(playlistConfig)
 	case "youtube":
-		playlistService := youtubeservices.NewYoutubePlaylistService(playlistConfig)
-		playlistControllers["youtube"] = controllers.NewPlaylistController(playlistService)
-
+		playlistService = youtubeservices.NewYoutubePlaylistService(playlistConfig)
 	}
+
+	playlistControllers[platform] = controllers.NewPlaylistController(playlistService)
 }
 
 func PlaylistInfoHandler(w http.ResponseWriter, r *http.Request) {
-	platform := strings.TrimPrefix(r.URL.Path, "/playlist_info/")
+	platform := strings.TrimPrefix(r.URL.Path, "/playlist-info/")
 
 	playlistController, ok := playlistControllers[platform]
 	if !ok {
@@ -40,30 +38,28 @@ func PlaylistInfoHandler(w http.ResponseWriter, r *http.Request) {
 	playlistController.GetPlaylistInfo(w, r)
 }
 
-func UserPlaylistsHandler(w http.ResponseWriter, r *http.Request) {
-	platform := strings.TrimPrefix(r.URL.Path, "/user_playlists/")
+func CurrentUserPlaylistsHandler(w http.ResponseWriter, r *http.Request) {
+	platform := strings.TrimPrefix(r.URL.Path, "/user-playlists/")
 
-	switch platform {
-	case "youtube":
-		youtube.HandleLogin(w, r)
-	case "spotify":
-		spotify.GetCurrentUserPlaylists(w, r)
-	default:
+	playlistController, ok := playlistControllers[platform]
+	if !ok {
 		http.Error(w, "Servicio no válido", http.StatusNotFound)
+		return
 	}
+
+	playlistController.GetCurrentUserPlaylists(w, r)
 }
 
-func PlaylistHandler(w http.ResponseWriter, r *http.Request) {
+func PlaylistItemsHandler(w http.ResponseWriter, r *http.Request) {
 	platform := strings.TrimPrefix(r.URL.Path, "/playlist/")
 
-	switch platform {
-	case "youtube":
-		youtube.GetPlaylistItemsInfo(w, r)
-	case "spotify":
-		spotify.GetPlaylistItemsInfo(w, r)
-	default:
-		http.Error(w, "Servicio no válido", http.StatusNotFound)
+	playlistController, ok := playlistControllers[platform]
+	if !ok {
+		http.Error(w, "Service not available", http.StatusNotFound)
+		return
 	}
+
+	playlistController.GetPlaylistItemsInfo(w, r)
 }
 
 func CreatePlaylist(w http.ResponseWriter, r *http.Request) {

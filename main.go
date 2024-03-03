@@ -39,10 +39,10 @@ func main() {
 
 	http.HandleFunc("/login/", handlers.LoginHandler)
 	http.HandleFunc("/callback/", handlers.CallbackHandler)
-	http.HandleFunc("/user_playlists/", handlers.UserPlaylistsHandler)
-	http.HandleFunc("/playlist/", handlers.PlaylistHandler)
-	http.HandleFunc("/playlist_info/", handlers.PlaylistInfoHandler)
-	http.HandleFunc("/create/", handlers.CreatePlaylist)
+	http.HandleFunc("/playlist-info/", handlers.PlaylistInfoHandler)
+	http.HandleFunc("/user-playlists/", handlers.CurrentUserPlaylistsHandler)
+	http.HandleFunc("/playlist/", handlers.PlaylistItemsHandler)
+	http.HandleFunc("/create-playlist/", handlers.CreatePlaylist)
 
 	http.HandleFunc("/post_yt", youtube.TestPostPlaylistItem)
 	http.HandleFunc("/convert_yt_to_s", youtube.ToSpotify)

@@ -11,6 +11,7 @@ var (
 	ReadResponseError  = "20"
 	UnmarshalJSONError = "30"
 	MarshalJSONError   = "31"
+	EncodingJSONError  = "50"
 )
 
 func ErrorManager(code string, err error) {
@@ -30,6 +31,9 @@ func ErrorManager(code string, err error) {
 		log.Fatalf("Error unmarshaling JSON: %v", err)
 	case MarshalJSONError:
 		log.Fatalf("Error marshaling JSON: %v", err)
+	case EncodingJSONError:
+		log.Fatalf("Error escribiendo la respuesta JSON: %v", err)
 	}
+
 	log.Fatalf("Unknown Error: %v", err)
 }

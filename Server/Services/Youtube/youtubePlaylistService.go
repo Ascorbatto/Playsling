@@ -17,15 +17,19 @@ func NewYoutubePlaylistService(playlistConfig *services.PlaylistConfig) *Youtube
 	return &YoutubePlaylistService{PlaylistConfig: *playlistConfig}
 }
 
-func (yps *YoutubePlaylistService) GetPlaylistInfo(w http.ResponseWriter, r *http.Request, playlistId string) interface{} {
+func (yps *YoutubePlaylistService) GetPlaylistInfo(w http.ResponseWriter, r *http.Request, playlistId string) {
 	endpoint := fmt.Sprint(utils.YoutubePlaylist + playlistId)
 	//body, err := utils.GETRequest(endpoint, ypc.PlaylistConfig.Token.AccessToken, nil)
-	body, err := utils.Request(yps.Client, "GET", endpoint, nil)
+	body, err := utils.Request("GET", yps.Client, endpoint, nil)
 	utils.ErrorManager(utils.ReadResponseError, err)
 
 	var PlaylistInfo models.PlaylistInfoYT
 	err = json.Unmarshal(body, &PlaylistInfo)
 	utils.ErrorManager(utils.UnmarshalJSONError, err)
 
-	return PlaylistInfo
+}
+
+func (yps *YoutubePlaylistService) GetCurrentUserPlaylists(w http.ResponseWriter, r *http.Request) {}
+
+func (yps *YoutubePlaylistService) GetPlaylistItemsInfo(w http.ResponseWriter, r *http.Request, playlistId string) {
 }
