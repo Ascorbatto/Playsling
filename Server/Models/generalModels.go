@@ -10,6 +10,7 @@ type Playlist struct {
 	Songs []Song
 }
 
-type AuthToken struct {
-	AccessToken string
+type User struct {
+	ID   string
+	Name string
 }

@@ -13,6 +13,8 @@ type SpotifyPlaylistService struct {
 	services.PlaylistConfig
 }
 
+var CurrentUserPlaylists models.CurrentUserPlaylistsS
+
 func NewSpotifyPlaylistService(playlistConfig *services.PlaylistConfig) *SpotifyPlaylistService {
 	return &SpotifyPlaylistService{PlaylistConfig: *playlistConfig}
 }
@@ -37,12 +39,11 @@ func (sps *SpotifyPlaylistService) GetCurrentUserPlaylists(w http.ResponseWriter
 	body, err := utils.Request("GET", sps.Client, utils.SpotifyCurrentUserPlaylists, nil)
 	utils.ErrorManager(utils.ReadResponseError, err)
 
-	var CurrentUserPlaylistsS models.CurrentUserPlaylistsS
-	err = json.Unmarshal(body, &CurrentUserPlaylistsS)
+	err = json.Unmarshal(body, &CurrentUserPlaylists)
 	utils.ErrorManager(utils.UnmarshalJSONError, err)
 
 	w.Header().Set("Content-Type", "application/json")
-	err = json.NewEncoder(w).Encode(CurrentUserPlaylistsS)
+	err = json.NewEncoder(w).Encode(CurrentUserPlaylists)
 	utils.ErrorManager(utils.EncodingJSONError, err)
 }
 
@@ -62,4 +63,12 @@ func (sps *SpotifyPlaylistService) GetPlaylistItemsInfo(w http.ResponseWriter, r
 	utils.ErrorManager(utils.EncodingJSONError, err)
 }
 
-func (sps *SpotifyPlaylistService) CreatePlaylist(w http.ResponseWriter, r *http.Request) {}
+func (sps *SpotifyPlaylistService) CreatePlaylist(w http.ResponseWriter, r *http.Request) {
+	if len(CurrentUserPlaylists.Items) == 0 {
+		sps.GetCurrentUserPlaylists(w, r)
+	}
+	if len(CurrentUser.ID) == 0 {
+		return
+	}
+
+}

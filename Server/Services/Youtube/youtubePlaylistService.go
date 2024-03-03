@@ -33,3 +33,6 @@ func (yps *YoutubePlaylistService) GetCurrentUserPlaylists(w http.ResponseWriter
 
 func (yps *YoutubePlaylistService) GetPlaylistItemsInfo(w http.ResponseWriter, r *http.Request, playlistId string) {
 }
+
+func (yps *YoutubePlaylistService) CreatePlaylist(w http.ResponseWriter, r *http.Request) {
+}

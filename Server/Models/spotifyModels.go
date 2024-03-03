@@ -40,3 +40,8 @@ type SearchItems struct {
 		Items []Track `json:"items"`
 	} `json:"tracks"`
 }
+
+type UserS struct {
+	DisplayName string `json:"display_name"`
+	ID          string `json:"id"`
+}

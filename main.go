@@ -43,6 +43,7 @@ func main() {
 	http.HandleFunc("/user-playlists/", handlers.CurrentUserPlaylistsHandler)
 	http.HandleFunc("/playlist/", handlers.PlaylistItemsHandler)
 	http.HandleFunc("/create-playlist/", handlers.CreatePlaylist)
+	http.HandleFunc("/me/", handlers.CurrentUserHandler)
 
 	http.HandleFunc("/post_yt", youtube.TestPostPlaylistItem)
 	http.HandleFunc("/convert_yt_to_s", youtube.ToSpotify)

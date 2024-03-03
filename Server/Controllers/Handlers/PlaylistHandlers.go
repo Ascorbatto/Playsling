@@ -2,7 +2,6 @@ package handlers
 
 import (
 	controllers "Conversify/Server/Controllers"
-	spotify "Conversify/Server/Controllers/Api/Spotify"
 	services "Conversify/Server/Services"
 	spotifyservices "Conversify/Server/Services/Spotify"
 	youtubeservices "Conversify/Server/Services/Youtube"
@@ -63,14 +62,13 @@ func PlaylistItemsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreatePlaylist(w http.ResponseWriter, r *http.Request) {
-	platform := strings.TrimPrefix(r.URL.Path, "/create/")
+	platform := strings.TrimPrefix(r.URL.Path, "/create-playlist/")
 
-	switch platform {
-	case "youtube":
-
-	case "spotify":
-		spotify.CreatePlaylist(w, r)
-	default:
-		http.Error(w, "Servicio no válido", http.StatusNotFound)
+	playlistController, ok := playlistControllers[platform]
+	if !ok {
+		http.Error(w, "Service not available", http.StatusNotFound)
+		return
 	}
+
+	playlistController.CreatePlaylist(w, r)
 }

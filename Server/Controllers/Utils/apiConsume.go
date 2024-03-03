@@ -2,9 +2,7 @@ package utils
 
 const (
 	//Spotify Endpoints
-	SpotifyAuth                  = "https://accounts.spotify.com/authorize"
-	SpotifyToken                 = "https://accounts.spotify.com/api/token"
-	SpotifyUserInfo              = "https://api.spotify.com/v1/me"
+	SpotifyCurrentUser           = "https://api.spotify.com/v1/me"
 	SpotifyCurrentUserPlaylists  = "https://api.spotify.com/v1/me/playlists"
 	SpotifyPlaylistItemsInfo     = "https://api.spotify.com/v1/playlists/"
 	SpotifySearch                = "https://api.spotify.com/v1/search?type=track&limit=50&q="

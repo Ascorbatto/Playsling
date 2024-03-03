@@ -50,4 +50,5 @@ func CallbackHandler(w http.ResponseWriter, r *http.Request) {
 
 func InitControllers(platform string, client *http.Client) {
 	InitPlaylistController(platform, client)
+	InitUserController(platform, client)
 }

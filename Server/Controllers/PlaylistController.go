@@ -27,3 +27,7 @@ func (pc *PlaylistController) GetPlaylistItemsInfo(w http.ResponseWriter, r *htt
 	playlistId := r.URL.Query().Get("playlist")
 	pc.PlaylistService.GetPlaylistItemsInfo(w, r, playlistId)
 }
+
+func (pc *PlaylistController) CreatePlaylist(w http.ResponseWriter, r *http.Request) {
+	pc.PlaylistService.CreatePlaylist(w, r)
+}
