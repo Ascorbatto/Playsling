@@ -1,15 +1,19 @@
 package models
 
-type CurrentUserPlaylists struct {
-	Items []PlaylistS `json:"items"`
+type CurrentUserPlaylistsS struct {
+	Items []PlaylistInfoS `json:"items"`
 }
 
-type PlaylistS struct {
-	ID    string `json:"id"`
-	Name  string `json:"name"`
-	Owner struct {
+type PlaylistInfoS struct {
+	Description string `json:"description"`
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Owner       struct {
 		ID string `json:"id"`
 	} `json:"owner"`
+	Tracks struct {
+		Total int `json:"total"`
+	} `json:"tracks"`
 }
 
 type PlaylistTracks struct {

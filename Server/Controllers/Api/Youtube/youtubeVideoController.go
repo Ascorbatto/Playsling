@@ -3,22 +3,21 @@ package youtube
 import (
 	utils "Conversify/Server/Controllers/Utils"
 	models "Conversify/Server/Models"
-	"encoding/json"
-	"fmt"
 )
 
 var Songs []models.Song
 
 func getVideoInfo(video_id string) models.VideoInfo {
-	endpoint := fmt.Sprintf(utils.YoutubeVideoInfo + video_id)
-	body, err := utils.GETRequest(endpoint, Token.AccessToken, nil)
-	utils.ErrorManager(utils.ReadResponseError, err)
+	/*	endpoint := fmt.Sprintf(utils.YoutubeVideoInfo + video_id)
+		body, err := utils.GETRequest(endpoint, Token.AccessToken, nil)
+		utils.ErrorManager(utils.ReadResponseError, err)
 
-	var video models.VideoInfo
-	err = json.Unmarshal(body, &video)
-	utils.ErrorManager(utils.UnmarshalJSONError, err)
+		var video models.VideoInfo
+		err = json.Unmarshal(body, &video)
+		utils.ErrorManager(utils.UnmarshalJSONError, err)
 
-	return video
+		return video*/
+	return models.VideoInfo{}
 }
 
 func GetSongs() {

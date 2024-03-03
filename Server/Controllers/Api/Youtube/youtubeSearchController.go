@@ -1,16 +1,12 @@
 package youtube
 
 import (
-	utils "Conversify/Server/Controllers/Utils"
 	models "Conversify/Server/Models"
-	"encoding/json"
-	"log"
 	"net/http"
-	"net/url"
 )
 
 func GetSearchInfo(w http.ResponseWriter, r *http.Request, songs models.Song) string {
-	search_name := songs.Name
+	/*search_name := songs.Name
 	for _, author := range songs.Author {
 		search_name = search_name + " " + author
 	}
@@ -51,6 +47,6 @@ func GetSearchInfo(w http.ResponseWriter, r *http.Request, songs models.Song) st
 		}
 	}
 
-	log.Printf("Track '%s' not found.", songs.Name)
+	log.Printf("Track '%s' not found.", songs.Name)*/
 	return ""
 }

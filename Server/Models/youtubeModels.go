@@ -1,10 +1,17 @@
 package models
 
-type PlaylistYT struct {
+type PlaylistInfoYT struct {
 	Items []struct {
 		Snippet struct {
-			Title string `json:"title"`
+			Title       string `json:"title"`
+			Description string `json:"description"`
 		} `json:"snippet"`
+		Status struct {
+			PrivacyStatus string `json:"privacyStatus"`
+		} `json:"status"`
+		ContentDetails struct {
+			ItemCount uint `json:"itemCount"`
+		} `json:"contentDetails"`
 	}
 }
 

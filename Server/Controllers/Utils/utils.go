@@ -2,54 +2,70 @@ package utils
 
 import (
 	models "Conversify/Server/Models"
-	"bytes"
 	"fmt"
 	"io"
 	"log"
 	"math"
 	"net/http"
-	"net/url"
+	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
 	"github.com/forPelevin/gomoji"
+	"github.com/joho/godotenv"
 )
 
-func GETRequest(endpoint, access_token string, body url.Values) ([]byte, error) {
+func LoadDotEnv() {
+	configDir, _ := os.Getwd()
+
+	dotenvPath := filepath.Join(configDir, "Server", "Config", ".env")
+
+	err := godotenv.Load(dotenvPath)
+	ErrorManager(LoadDotenvError, err)
+}
+
+/*func GETRequest(endpoint string, client *http.Client, body url.Values) ([]byte, error) {
 
 	if body != nil {
 		req, err := http.NewRequest("GET", endpoint, bytes.NewBufferString(body.Encode()))
 		ErrorManager(CreateRequestError, err)
-		return Request(req, access_token, "")
+		return Request(req, client, "")
 	}
 
 	req, err := http.NewRequest("GET", endpoint, nil)
 	ErrorManager(CreateRequestError, err)
 
-	return Request(req, access_token, "")
+	return Request(req, client, "")
 }
 
-func POSTRequest(endpoint, access_token string, body io.Reader, content_type string) ([]byte, error) {
+func POSTRequest(endpoint string, client *http.Client, body io.Reader, content_type string) ([]byte, error) {
 
 	if body != nil {
 		req, err := http.NewRequest("POST", endpoint, body)
 		ErrorManager(CreateRequestError, err)
-		return Request(req, access_token, content_type)
+		return Request(req, client, content_type)
 	}
 
 	req, err := http.NewRequest("POST", endpoint, nil)
 	ErrorManager(CreateRequestError, err)
-	return Request(req, access_token, "")
-}
+	return Request(req, client, "")
+}*/
 
-func Request(req *http.Request, access_token string, content_type string) ([]byte, error) {
+func Request(client *http.Client, method, endpoint string, body io.Reader) ([]byte, error) {
 
-	req.Header.Add("Authorization", "Bearer "+access_token)
+	/*req.Header.Add("Authorization", "Bearer "+access_token)
 	if len(content_type) != 0 {
 		req.Header.Add("Content-Type", content_type)
 	}
 
-	client := &http.Client{}
+	client := &http.Client{}*/
+	if body != nil {
+		return nil, nil
+	}
+
+	req, err := http.NewRequest(method, endpoint, body)
+	ErrorManager(CreateRequestError, err)
 
 	resp, err := client.Do(req)
 	ErrorManager(SendRequestError, err)

@@ -4,35 +4,32 @@ import (
 	spotify "Conversify/Server/Controllers/Api/Spotify"
 	utils "Conversify/Server/Controllers/Utils"
 	models "Conversify/Server/Models"
-	"bytes"
-	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 )
 
 var (
 	PlaylistItems models.PlaylistItems
-	Playlist      models.PlaylistYT
+	Playlist      models.PlaylistInfoYT
 	PlaylistId    string
 )
 
 // Retrieves the playlist details (name, author, description...).
 func GetPlaylistInfo(w http.ResponseWriter, r *http.Request) {
+	/*
+		endpoint := fmt.Sprint(utils.YoutubePlaylist + PlaylistId)
+		body, err := utils.GETRequest(endpoint, Token.AccessToken, nil)
+		utils.ErrorManager(utils.ReadResponseError, err)
 
-	endpoint := fmt.Sprint(utils.YoutubePlaylist + PlaylistId)
-	body, err := utils.GETRequest(endpoint, Token.AccessToken, nil)
-	utils.ErrorManager(utils.ReadResponseError, err)
+		err = json.Unmarshal(body, &Playlist)
+		utils.ErrorManager(utils.UnmarshalJSONError, err)
 
-	err = json.Unmarshal(body, &Playlist)
-	utils.ErrorManager(utils.UnmarshalJSONError, err)
-
-	log.Println("Playlist info retrieved without issues.")
+		log.Println("Playlist info retrieved without issues.")*/
 }
 
 // Retrieves the playlist items.
 func GetPlaylistItemsInfo(w http.ResponseWriter, r *http.Request) {
-	PlaylistId = r.URL.Query().Get("playlist")
+	/*PlaylistId = r.URL.Query().Get("playlist")
 
 	endpoint := fmt.Sprintf(utils.YoutubePlaylistItems + PlaylistId)
 	body, err := utils.GETRequest(endpoint, Token.AccessToken, nil)
@@ -43,12 +40,12 @@ func GetPlaylistItemsInfo(w http.ResponseWriter, r *http.Request) {
 	//GetPlaylistInfo(w, r)
 	//GetSongs()
 
-	log.Println("Playlist items info retrieved without issues.")
+	//log.Println("Playlist items info retrieved without issues.")
 
-	http.Redirect(w, r, utils.Host+"/create/spotify?user_id=12164928183&name="+Playlist.Items[0].Snippet.Title, http.StatusFound)
+	//http.Redirect(w, r, utils.Host+"/create/spotify?user_id=12164928183&name="+Playlist.Items[0].Snippet.Title, http.StatusFound)
 	//
 	//fmt.Println(songs)
-
+	*/
 }
 
 func TestPostPlaylistItem(w http.ResponseWriter, r *http.Request) {
@@ -58,26 +55,26 @@ func TestPostPlaylistItem(w http.ResponseWriter, r *http.Request) {
 }
 
 func PostPlaylistItem(w http.ResponseWriter, r *http.Request, playlist_id, video_id string) {
-
-	data := map[string]interface{}{
-		"snippet": map[string]interface{}{
-			"playlistId": playlist_id,
-			"resourceId": map[string]string{
-				"kind":    "youtube#video",
-				"videoId": video_id,
+	/*
+		data := map[string]interface{}{
+			"snippet": map[string]interface{}{
+				"playlistId": playlist_id,
+				"resourceId": map[string]string{
+					"kind":    "youtube#video",
+					"videoId": video_id,
+				},
 			},
-		},
-	}
+		}
 
-	content_type := "application/json"
+		content_type := "application/json"
 
-	json_data, err := json.Marshal(data)
-	utils.ErrorManager(utils.MarshalJSONError, err)
+		json_data, err := json.Marshal(data)
+		utils.ErrorManager(utils.MarshalJSONError, err)
 
-	body, err := utils.POSTRequest(utils.YoutubePostPlaylistItem, Token.AccessToken, bytes.NewBuffer(json_data), content_type)
-	utils.ErrorManager(utils.ReadResponseError, err)
+		body, err := utils.POSTRequest(utils.YoutubePostPlaylistItem, Token.AccessToken, bytes.NewBuffer(json_data), content_type)
+		utils.ErrorManager(utils.ReadResponseError, err)
 
-	fmt.Println(string(body))
+		fmt.Println(string(body))*/
 }
 
 func ToSpotify(w http.ResponseWriter, r *http.Request) {
