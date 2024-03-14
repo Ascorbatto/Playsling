@@ -4,6 +4,7 @@ import (
 	youtube "Conversify/Server/Controllers/Api/Youtube"
 	handlers "Conversify/Server/Controllers/Handlers"
 	utils "Conversify/Server/Controllers/Utils"
+	"fmt"
 	"net/http"
 	"os"
 
@@ -47,5 +48,9 @@ func main() {
 
 	http.HandleFunc("/post_yt", youtube.TestPostPlaylistItem)
 	http.HandleFunc("/convert_yt_to_s", youtube.ToSpotify)
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Hello")
+	})
 	http.ListenAndServe(":8888", nil)
 }

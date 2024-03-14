@@ -18,5 +18,7 @@ func (ac *AuthController) HandleLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ac *AuthController) HandleCallback(w http.ResponseWriter, r *http.Request) *http.Client {
-	return ac.AuthService.HandleCallback(w, r)
+	client := ac.AuthService.HandleCallback(w, r)
+	http.Redirect(w, r, "/", http.StatusMovedPermanently)
+	return client
 }

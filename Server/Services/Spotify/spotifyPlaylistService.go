@@ -4,11 +4,15 @@ import (
 	utils "Conversify/Server/Controllers/Utils"
 	models "Conversify/Server/Models"
 	services "Conversify/Server/Services"
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"strings"
 )
 
+// TODO implement a way to verify if the current user ID and playlist are retrieved
 type SpotifyPlaylistService struct {
 	services.PlaylistConfig
 }
@@ -47,9 +51,8 @@ func (sps *SpotifyPlaylistService) GetCurrentUserPlaylists(w http.ResponseWriter
 	utils.ErrorManager(utils.EncodingJSONError, err)
 }
 
-func (sps *SpotifyPlaylistService) GetPlaylistItemsInfo(w http.ResponseWriter, r *http.Request, playlistId string) {
-	playlist_id := r.URL.Query().Get("playlist")
-	endpoint := fmt.Sprintf(utils.SpotifyPlaylistItemsInfo+"%s/tracks", playlist_id)
+func (sps *SpotifyPlaylistService) GetPlaylistItemsInfo(w http.ResponseWriter, r *http.Request, playlistID string) {
+	endpoint := fmt.Sprintf(utils.SpotifyPlaylistItemsInfo+"%s/tracks", playlistID)
 
 	body, err := utils.Request("GET", sps.Client, endpoint, nil)
 	utils.ErrorManager(utils.ReadResponseError, err)
@@ -63,12 +66,45 @@ func (sps *SpotifyPlaylistService) GetPlaylistItemsInfo(w http.ResponseWriter, r
 	utils.ErrorManager(utils.EncodingJSONError, err)
 }
 
-func (sps *SpotifyPlaylistService) CreatePlaylist(w http.ResponseWriter, r *http.Request) {
+func (sps *SpotifyPlaylistService) CreatePlaylist(w http.ResponseWriter, r *http.Request, playlistName string) {
 	if len(CurrentUserPlaylists.Items) == 0 {
 		sps.GetCurrentUserPlaylists(w, r)
 	}
 	if len(CurrentUser.ID) == 0 {
+		w.Write([]byte("User ID not available."))
 		return
 	}
+	for _, playlist := range CurrentUserPlaylists.Items {
+		if strings.Contains(playlist.Name, playlistName) {
+			w.Write([]byte("This playlist already exists."))
+			log.Println(playlist.ID)
+			sps.GetPlaylistItemsInfo(w, r, playlist.ID)
+			return
+		}
+	}
+	endpoint := fmt.Sprint(utils.SpotifyCreatePlaylist + CurrentUser.ID + "/playlists")
+	log.Println(endpoint)
 
+	data := map[string]string{
+		"name": playlistName,
+	}
+	log.Println(data)
+
+	var playlistInfo models.PlaylistInfoS
+
+	jsonData, err := json.Marshal(data)
+	log.Println(jsonData)
+	utils.ErrorManager(utils.MarshalJSONError, err)
+
+	body, err := utils.Request("POST", sps.Client, endpoint, bytes.NewBuffer(jsonData))
+	log.Println(body)
+	utils.ErrorManager(utils.ReadResponseError, err)
+
+	err = json.Unmarshal(body, &playlistInfo)
+	log.Println(playlistInfo)
+	utils.ErrorManager(utils.UnmarshalJSONError, err)
+
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(playlistInfo)
+	utils.ErrorManager(utils.EncodingJSONError, err)
 }

@@ -9,6 +9,7 @@ import (
 	"net/http"
 )
 
+// TODO implement the rest of the youtube playlist methods
 type YoutubePlaylistService struct {
 	services.PlaylistConfig
 }
@@ -34,5 +35,5 @@ func (yps *YoutubePlaylistService) GetCurrentUserPlaylists(w http.ResponseWriter
 func (yps *YoutubePlaylistService) GetPlaylistItemsInfo(w http.ResponseWriter, r *http.Request, playlistId string) {
 }
 
-func (yps *YoutubePlaylistService) CreatePlaylist(w http.ResponseWriter, r *http.Request) {
+func (yps *YoutubePlaylistService) CreatePlaylist(w http.ResponseWriter, r *http.Request, playlistName string) {
 }

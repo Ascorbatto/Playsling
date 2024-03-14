@@ -7,7 +7,12 @@ type Song struct {
 }
 
 type Playlist struct {
+	Name  string
 	Songs []Song
+}
+
+type UserPlaylists struct {
+	Playlists []Playlist
 }
 
 type User struct {

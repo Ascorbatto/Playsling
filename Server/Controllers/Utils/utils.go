@@ -25,47 +25,27 @@ func LoadDotEnv() {
 	ErrorManager(LoadDotenvError, err)
 }
 
-/*func GETRequest(endpoint string, client *http.Client, body url.Values) ([]byte, error) {
-
-	if body != nil {
-		req, err := http.NewRequest("GET", endpoint, bytes.NewBufferString(body.Encode()))
-		ErrorManager(CreateRequestError, err)
-		return Request(req, client, "")
-	}
-
-	req, err := http.NewRequest("GET", endpoint, nil)
-	ErrorManager(CreateRequestError, err)
-
-	return Request(req, client, "")
-}
-
-func POSTRequest(endpoint string, client *http.Client, body io.Reader, content_type string) ([]byte, error) {
-
-	if body != nil {
-		req, err := http.NewRequest("POST", endpoint, body)
-		ErrorManager(CreateRequestError, err)
-		return Request(req, client, content_type)
-	}
-
-	req, err := http.NewRequest("POST", endpoint, nil)
-	ErrorManager(CreateRequestError, err)
-	return Request(req, client, "")
-}*/
-
 func Request(method string, client *http.Client, endpoint string, body io.Reader) ([]byte, error) {
 
-	/*req.Header.Add("Authorization", "Bearer "+access_token)
-	if len(content_type) != 0 {
-		req.Header.Add("Content-Type", content_type)
+	var contentType string
+
+	switch method {
+	case "POST":
+		contentType = "application/json"
+	default:
+		contentType = ""
 	}
 
-	client := &http.Client{}*/
-	if body != nil {
+	/*if body != nil {
 		return nil, nil
-	}
+	}*/
 
 	req, err := http.NewRequest(method, endpoint, body)
 	ErrorManager(CreateRequestError, err)
+
+	if contentType != "" {
+		req.Header.Set("Content-Type", contentType)
+	}
 
 	resp, err := client.Do(req)
 	ErrorManager(SendRequestError, err)
